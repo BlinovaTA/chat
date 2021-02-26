@@ -1,8 +1,11 @@
 @import 'normalize.css';
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap');
 
 body,
 html {
   height: 100%;
+  width: 100%;
+  font-family: 'Ubuntu', sans-serif;
 }
 
 ul {
@@ -12,4 +15,273 @@ ul {
   li {
     list-style: none;
   }
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.auth {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #17212B;
+  width: 452px;
+  height: 542px;
+  border-radius: 4px;
+
+  &__logo {
+    width: 140px;
+    height: 140px;
+    background: #232F3D;
+    border-radius: 50%;
+    margin-top: 40px;
+    margin-bottom: 28px;
+  }
+
+  &__img {
+    transform: translate(35%, 55%);
+  }
+
+  &__title {
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 28px;
+    color: #fff;
+    margin-bottom: 12px;
+  }
+
+  &__desc {
+    font-size: 16px;
+    line-height: 18px;
+    color: #7F91A4;
+    text-align: center;
+    padding: 0 45px;
+    margin-bottom: 33px;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  &__input {
+    margin-bottom: 15px;
+    width: 298px;
+    border: none;
+    background: #17212B;
+    border-bottom: 1px #465461 solid;
+    padding: 13px;
+    color: #7F91A4;
+
+    &--error {
+      border-bottom: 1px red solid;
+    }
+  }
+
+  &__submit {
+    padding: 13px 38px;
+    margin-top: 26px;
+    text-align: end;
+    width: 132px;
+    align-self: flex-end;
+  }
+}
+
+.chat {
+  width: 100%;
+  height: 100%;
+  background: #17212B;
+  display: flex;
+  color: #fff;
+}
+
+.left {
+  width: 263px;
+  border-right: 1px #0E1621 solid;
+}
+
+.right {
+  background: #0E1621;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+
+  &__header {
+    height: 56px;
+    background: #17212B;
+  }
+
+  &__messages {
+    flex: 1;
+    overflow: auto;
+  }
+
+  &__message {
+    height: 54px;
+    background: #17212B;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__chat-name {
+    color: #fff;
+    padding: 16px;
+  }
+}
+
+.message {
+
+  &__text {
+    flex: 1;
+    margin: 0 12px;
+    background: #17212B;
+    border: none;
+    color: #fff;
+  }
+
+  &__submit {
+    width: 112px;
+    height: 30px;
+    margin-right: 12px;
+  }
+
+  &__info {
+    color: #858F98;
+    padding: 12px;
+  }
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.4);
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+
+  &__content {
+    width: 364px;
+    height: 270px;
+    background: #17212B;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    align-self: flex-end;
+    margin-right: 10px;
+  }
+
+  &__close:hover,
+  &__close:focus {
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  &__title {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 21px;
+    margin-left: 35px;
+    margin-bottom: 27px;
+  }
+
+  &__user-data {
+    margin-bottom: 10px;
+  }
+}
+
+.user {
+
+  display: flex;
+  padding: 12px;
+  align-items: center;
+
+  &__avatar {
+    background: #232F3D;
+    height: 46px;
+    width: 46px;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-right: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &--large {
+      height: 86px;
+      width: 86px;
+      margin-left: 23px;
+    }
+
+    &--large>.user__img--large {
+      height: 86px;
+      width: 86px;
+      border-radius: 50%;
+    }
+  }
+
+  &__img {
+    height: 46px;
+    width: 46px;
+    border-radius: 50%;
+  }
+
+  &__data {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__info {
+
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  &__buttons {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__buttons>.button {
+    padding: 10px 30px;
+    margin: 10px;
+  }
+}
+
+.users {
+  padding: 12px;
+}
+
+.button {
+  background: #5188C1;
+  border-radius: 5px;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.custom-image {
+  border-radius: 50%;
 }

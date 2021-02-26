@@ -1,0 +1,46 @@
+<div class="chat">
+  <div class="left">
+    <div class="left__header user">
+      <div class="user__avatar">
+        <img id={{nick}} src={{photo}} alt="avatar" class="user__img current-user__img">
+      </div>
+      <div class="user__name">{{name}}</div>
+    </div>
+    <div class="users">
+      <div class="users__title">Участники</div>
+      <ul class="users__list">
+
+      </ul>
+    </div>
+  </div>
+  <div class="right">
+    <div class="right__header">
+      <div class="right__chat-name">Чат</div>
+      <div class="right__users-count"></div>
+    </div>
+    <ul class="right__messages">
+
+    </ul>
+    <div class="right__message message">
+      <input type="text" class="message__text" placeholder="Введите сообщение...">
+      <button class="button message__submit">Отправить</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal">
+  <div class="modal__content">
+    <span class="modal__close">&times;</span>
+    <div class="modal__title">Загрузка фото</div>
+    <div class="modal__user-data user">
+      <div class="user__avatar user__avatar--large">
+        <img id={{nick}} src={{photo}} alt="avatar" class="modal__img user__img--large current-user__img">
+      </div>
+      <div class="user__name">{{name}}</div>
+    </div>
+    <div class="user__buttons buttons">
+      <button class="button button__load">Загрузить</button>
+      <button class="button button__cancel">Отмена</button>
+    </div>
+  </div>
+</div>
