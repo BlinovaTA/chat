@@ -16,29 +16,18 @@ export default class Client {
   }
 
   login(name, nick) {
-    this.sendMessage('login', { name: name, nick: nick });
+    this.sendMessage({ type: 'login', name, nick });
   }
 
   sendTextMessage(name, nick, message) {
-    this.sendMessage('message', { name: name, nick: nick, message: message });
+    this.sendMessage({ type: 'message', name, nick, message });
   }
 
   loadPhoto(photo, nick) {
-    this.socket.send(
-      JSON.stringify({
-        type: 'photo',
-        photo: photo,
-        nick: nick
-      })
-    );
+    this.sendMessage({ type: 'photo', photo, nick });
   }
 
-  sendMessage(type, data) {
-    this.socket.send(
-      JSON.stringify({
-        type: type,
-        data: data,
-      })
-    );
+  sendMessage(data) {
+    this.socket.send(JSON.stringify(data));
   }
 }

@@ -8,26 +8,29 @@ class Server {
 
     this.wss.on('connection', function connection(ws) {
 
-      let currentNick;
+      let currentUser;
 
       ws.on('message', function messageHandler(e) {
         const request = JSON.parse(e);
 
         switch (request.type) {
           case 'login': {
-            currentNick = this.login(ws, request);
+            currentUser = this.getCurrentUser(ws, request);
+
+            this.login(ws, currentUser);
+            this.sendNameToOthers(currentUser);
 
             break;
           }
 
           case 'message': {
-            this.sendMessageToEveryone(request);
+            this.sendDataToAll(request);
 
             break;
           }
 
           case 'photo': {
-            this.sendPhotoToEveryone(request);
+            this.sendDataToAll(request);
 
             break;
           }
@@ -43,13 +46,13 @@ class Server {
           if (item.connection !== null) {
             item.connection.send(JSON.stringify({
               type: 'logout',
-              name: this.users.find(item => item.nick === currentNick).name
+              name: this.users.find(item => item.nick === currentUser.nick).name
             }))
           }
         })
 
         this.setUsers(this.users.map(item => {
-          if (item.nick === currentNick) {
+          if (item.nick === currentUser.nick) {
             item.connection = null;
           }
 
@@ -59,9 +62,7 @@ class Server {
     }.bind(this));
   }
 
-  login(ws, request) {
-    let user = this.getCurrentUser(ws, request);
-
+  login(ws, user) {
     ws.send(JSON.stringify({
       type: 'login',
       name: user.name,
@@ -69,82 +70,69 @@ class Server {
       photo: user.photo,
       allUsers: this.getAllUsers()
     }));
-
-    this.sendNameToEveryone(user.nick, user.name, user.photo);
-
-    return user.nick;
   }
 
   getCurrentUser(ws, request) {
-    let { name, nick } = request.data;
+    let { name, nick } = request;
 
     let user = this.users.find(item => item.nick === nick);
+    let newUser = user === undefined;
 
-    if (user !== undefined) {
-      this.setUsers(this.users.map(item => {
-        if (item.nick === nick) {
-          item.connection = ws;
-        }
-
-        return item;
-      }));
-
-    } else {
+    if (newUser) {
       user = {
-        connection: ws,
-        name: name,
-        nick: nick,
+        name,
+        nick,
         photo: './src/img/default-photo.svg'
       };
+    }
 
+    let currentUser = { ...user };
+    user.connection = ws;
+
+    if (newUser) {
       this.users.push(user);
     }
 
-    return user;
+    return currentUser;
   }
 
-  sendNameToEveryone(nick, name, photo) {
+  sendNameToOthers(user) {
     this.users.forEach(item => {
-      if ((nick !== item.nick) && (item.connection !== null)) {
-        item.connection.send(JSON.stringify({
-          type: 'users',
-          name: name,
-          nick: nick,
-          photo: photo
-        }));
+      if ((user.nick !== item.nick) && (item.connection !== null)) {
+        user.type = 'users';
+
+        item.connection.send(JSON.stringify(user));
       }
     });
   }
 
-  sendMessageToEveryone(request) {
-    const { message, name, nick } = request.data;
+  sendDataToAll(request) {
+    let user = this.users.find(item => item.nick === request.nick);
+    let data = this.buildData(request, user);
 
-    let user = this.users.find(item => item.nick === nick);
-
-    const data = {
-      type: 'message',
-      message: message,
-      name: name,
-      nick: nick,
-      time: dayjs().format('HH:mm'),
-      photo: user.photo
-    };
-
-    this.users.forEach(item => item.connection.send(JSON.stringify(data)));
+    this.users.forEach(item => item.connection !== null && item.connection.send(JSON.stringify(data)));
   }
 
-  sendPhotoToEveryone(request) {
-    let { photo, nick } = request;
+  buildData(request, user) {
+    switch (request.type) {
+      case 'message': {
+        request.time = dayjs().format('HH:mm');
+        request.photo = user.photo;
 
-    let user = this.users.find(item => item.nick === nick);
+        break;
+      }
 
-    user.photo = photo;
+      case 'photo': {
+        user.photo = request.photo;
 
-    this.users.forEach(item => item.connection.send(JSON.stringify({
-      type: 'photo',
-      nick: nick,
-      photo: photo
-    })));
+        break;
+      }
+
+      default:
+        break;
+    }
+
+    return request;
   }
 
   setUsers(users) {
@@ -152,17 +140,7 @@ class Server {
   }
 
   getAllUsers() {
-    return this.users.reduce((prev, item) => {
-      if (item.connection !== null) {
-        prev.push({
-          name: item.name,
-          nick: item.nick,
-          photo: item.photo
-        });
-      }
-
-      return prev;
-    }, [])
+    return this.users.filter(item => item.connection !== null);
   }
 }
 

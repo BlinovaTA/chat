@@ -7,7 +7,9 @@ export default class Auth {
     const submitButton = document.querySelector('.auth__submit');
     submitButton.addEventListener('click', authSubmitClick);
 
-    function authSubmitClick() {
+    function authSubmitClick(e) {
+      e.preventDefault();
+
       const nameElement = document.querySelector('#name');
       const name = nameElement.value.trim();
 
@@ -29,8 +31,8 @@ export default class Auth {
       if (name && nick) {
         onClick({
           type: 'login',
-          name: name,
-          nick: nick
+          name,
+          nick
         });
       }
     }

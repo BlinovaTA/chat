@@ -43,9 +43,9 @@ export default class Chat {
       case 'login': {
         const chatCompile = Handlebars.compile(chat);
         this.container.innerHTML = chatCompile({
-          name: name,
-          nick: nick,
-          photo: photo
+          name,
+          nick,
+          photo
         });
 
         let self = this;
