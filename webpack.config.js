@@ -10,6 +10,9 @@ module.exports = (env, options) => {
       path: path.resolve(__dirname, 'dist'),
       filename: 'index.bundle.js',
     },
+    externals: {
+      "fs": "commonjs fs"
+    },
     devServer: {
       open: true
     },
@@ -17,7 +20,7 @@ module.exports = (env, options) => {
     module: {
       rules: [
         {
-          test: /\.html$/i,
+          test: /\.hbs$/i,
           loader: 'html-loader'
         },
         {
@@ -29,13 +32,20 @@ module.exports = (env, options) => {
             "css-loader",
             "sass-loader",
           ],
+        },
+        {
+          test: /\.(png|svg)$/,
+          loader: 'url-loader',
+          options: {
+            name: 'img/[name].[ext]',
+          },
         }
       ],
     },
     plugins: [
       new CleanWebpackPlugin(),
       new HtmlWebpackPlugin({
-        template: './index.html',
+        template: './index.hbs',
         filename: 'index.html'
       }),
       new MiniCssExtractPlugin({
